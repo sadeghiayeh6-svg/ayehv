@@ -1,28 +1,1139 @@
-name: NodeJS with Webpack
+```html
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayeh Sadeghi | Operations Documentation & Process Improvement</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        purple: {
+                            400: '#c084fc',
+                            500: '#a855f7',
+                            600: '#9333ea',
+                            700: '#7e22ce',
+                            900: '#3b0764',
+                        },
+                        violet: {
+                            400: '#a78bfa',
+                            500: '#8b5cf6',
+                            600: '#7c3aed',
+                        },
+                        obsidian: {
+                            800: '#120f24',
+                            900: '#090714',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Vazirmatn', 'sans-serif'],
+                        fa: ['Vazirmatn', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Vazirmatn:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Three.js Library for Minimal Neuron Mesh Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    <style>
+        body {
+            background-color: #090714;
+            color: #f1f5f9;
+            font-family: 'Inter', 'Vazirmatn', sans-serif;
+            overflow-x: hidden;
+        }
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+        #webgl-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            pointer-events: none;
+        }
 
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
+        .content-layer {
+            position: relative;
+            z-index: 10;
+        }
 
-    steps:
-    - uses: actions/checkout@v4
+        /* Glassmorphism Luxury Styles */
+        .glass-panel {
+            background: rgba(9, 7, 20, 0.78);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(168, 85, 247, 0.22);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        }
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
+        .glass-panel-hover {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
 
-    - name: Build
-      run: |
-        npm install
-        npx webpack
+        .glass-panel-hover:hover {
+            border-color: rgba(168, 85, 247, 0.55);
+            box-shadow: 0 10px 40px -10px rgba(168, 85, 247, 0.35), 0 0 20px rgba(139, 92, 246, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .glass-card {
+            background: rgba(18, 15, 36, 0.55);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            border-color: rgba(168, 85, 247, 0.4);
+            background: rgba(18, 15, 36, 0.75);
+        }
+
+        /* Purple Aura Glow */
+        #cursor-glow {
+            position: fixed;
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.12) 0%, rgba(124, 58, 237, 0.05) 45%, rgba(0,0,0,0) 75%);
+            pointer-events: none;
+            z-index: 1;
+            transform: translate(-50%, -50%);
+            transition: width 0.3s, height 0.3s;
+        }
+
+        /* Purple Gradient Text */
+        .purple-gradient-text {
+            background: linear-gradient(135deg, #f3e8ff 0%, #c084fc 40%, #9333ea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #090714;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e1938;
+            border-radius: 4px;
+            border: 1px solid rgba(168, 85, 247, 0.25);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a855f7;
+        }
+
+        /* Persian Alignment */
+        .fa-mode {
+            direction: rtl;
+            font-family: 'Vazirmatn', sans-serif;
+        }
+    </style>
+</head>
+<body class="relative min-h-screen text-slate-200 selection:bg-purple-600 selection:text-white">
+
+    <!-- Minimal Neurons Canvas Background & Cursor Glow -->
+    <canvas id="webgl-bg"></canvas>
+    <div id="cursor-glow"></div>
+
+    <div class="content-layer">
+        <header class="sticky top-0 z-50 glass-panel border-b border-purple-500/20 px-4 lg:px-8 py-3.5 transition-all duration-300">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-indigo-700 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-purple-500/20">
+                        AS
+                    </div>
+                    <div>
+                        <a href="https://www.ayehvega.ir" target="_blank" class="font-bold text-base text-white tracking-wide hover:text-purple-400 transition-colors">Ayeh Sadeghi</a>
+                        <a href="https://www.ayehvega.ir" target="_blank" class="block text-[11px] font-mono text-purple-300/80 hover:text-purple-200 transition-colors">
+                            <i class="fa-solid fa-globe text-[10px] mr-1"></i>www.ayehvega.ir
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex items-center gap-6 text-xs font-medium text-slate-300">
+                    <a href="#section-01" class="hover:text-purple-400 transition-colors" data-en="01. Context" data-fa="۰۱. زمینه">01. Context</a>
+                    <a href="#section-02" class="hover:text-purple-400 transition-colors" data-en="02. Workflow" data-fa="۰۲. گردش کار">02. Workflow</a>
+                    <a href="#section-03" class="hover:text-purple-400 transition-colors" data-en="03. Checklist" data-fa="۰۳. چک‌لیست">03. Checklist</a>
+                    <a href="#section-04" class="hover:text-purple-400 transition-colors" data-en="04. Tracker" data-fa="۰۴. طراحی فرم">04. Tracker Design</a>
+                    <a href="#section-05" class="hover:text-purple-400 transition-colors" data-en="05. Value" data-fa="۰۵. ارزش‌ها">05. Value</a>
+                    <a href="#section-06" class="hover:text-purple-400 transition-colors" data-en="06. Calculator" data-fa="۰۶. محاسبه پروژه">06. Scope Calculator</a>
+                </nav>
+
+                <!-- Language Selector & CTA -->
+                <div class="flex items-center gap-3">
+                    <div class="flex bg-obsidian-800/90 p-1 rounded-lg border border-purple-900/60 text-xs font-mono">
+                        <button onclick="setLanguage('en')" id="lang-en" class="px-2.5 py-1 rounded transition-colors bg-purple-600 text-white font-bold">EN</button>
+                        <button onclick="setLanguage('dual')" id="lang-dual" class="px-2.5 py-1 rounded transition-colors text-slate-400 hover:text-white">EN/FA</button>
+                        <button onclick="setLanguage('fa')" id="lang-fa" class="px-2.5 py-1 rounded transition-colors text-slate-400 hover:text-white font-fa">فارسی</button>
+                    </div>
+
+                    <a href="#contact" class="hidden sm:inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white text-xs font-bold px-4 py-2 rounded-lg shadow-lg shadow-purple-500/25 transition-all transform hover:-translate-y-0.5">
+                        <i class="fa-regular fa-paper-plane"></i>
+                        <span data-en="Contact" data-fa="ارتباط">Contact</span>
+                    </a>
+
+                    <button onclick="toggleMobileMenu()" class="md:hidden text-slate-300 text-xl p-2">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu Dropdown -->
+            <div id="mobile-menu" class="hidden md:hidden pt-4 pb-2 border-t border-purple-900/40 mt-3 space-y-2 text-xs">
+                <a href="#section-01" class="block py-2 text-slate-300 hover:text-purple-400">01. Context & Objective</a>
+                <a href="#section-02" class="block py-2 text-slate-300 hover:text-purple-400">02. Proposed Workflow</a>
+                <a href="#section-03" class="block py-2 text-slate-300 hover:text-purple-400">03. Checklist Template</a>
+                <a href="#section-04" class="block py-2 text-slate-300 hover:text-purple-400">04. Digital Form Design</a>
+                <a href="#section-05" class="block py-2 text-slate-300 hover:text-purple-400">05. Capabilities</a>
+                <a href="#section-06" class="block py-2 text-slate-300 hover:text-purple-400">06. Project Estimator</a>
+            </div>
+        </header>
+
+        <section class="py-20 lg:py-28 px-6 text-center max-w-5xl mx-auto">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-mono mb-6 backdrop-blur-md">
+                <span class="w-2 h-2 rounded-full bg-purple-400 animate-pulse"></span>
+                <span data-en="Case Study Portfolio | Neural Operations Architecture" data-fa="نمونه‌کار موردی | معماری فرآیندهای شبکه‌ای">Case Study Portfolio | Neural Operations Architecture</span>
+            </span>
+
+            <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white mb-6 leading-tight">
+                Ayeh Sadeghi
+                <span class="block text-2xl sm:text-4xl font-light text-slate-300 mt-2">
+                    <span class="purple-gradient-text font-semibold">Operations Documentation</span> & Process Design
+                </span>
+            </h1>
+
+            <p class="text-slate-300 max-w-3xl mx-auto text-base sm:text-lg leading-relaxed mb-8"
+               data-en="A practical demonstration based on operational experience in aviation (~9 years in cabin operations and senior cabin crew responsibilities)."
+               data-fa="یک نمونه عملی بر اساس تجربه عملیاتی در صنعت هوانوردی (حدود ۹ سال در عملیات کابین و مسئولیت‌های سرپرستی ارشد).">
+                A practical demonstration based on operational experience in aviation (~9 years in cabin operations and senior cabin crew responsibilities).
+            </p>
+
+            <div class="flex flex-wrap items-center justify-center gap-4 text-xs font-mono text-slate-300 mb-10">
+                <span class="px-3.5 py-2 rounded-lg bg-obsidian-800/80 border border-purple-900/50"><i class="fa-solid fa-plane-departure text-purple-400 mr-2"></i>Aviation Standard Compliance</span>
+                <span class="px-3.5 py-2 rounded-lg bg-obsidian-800/80 border border-purple-900/50"><i class="fa-solid fa-list-check text-indigo-400 mr-2"></i>SOP & Audit Workflows</span>
+                <span class="px-3.5 py-2 rounded-lg bg-obsidian-800/80 border border-purple-900/50"><i class="fa-solid fa-globe text-purple-400 mr-2"></i>Bilingual Systems (EN / FA)</span>
+            </div>
+
+            <!-- Disclaimer Notice -->
+            <div class="max-w-2xl mx-auto p-4 rounded-xl bg-purple-950/40 border border-purple-500/30 text-purple-200 text-xs text-left sm:text-center backdrop-blur-md flex items-start sm:items-center gap-3">
+                <i class="fa-solid fa-circle-info text-purple-400 text-lg flex-shrink-0"></i>
+                <div data-en="Notice: This is a reconstructed, anonymized demonstration based on professional experience; not a confidential airline document, and no performance metric is claimed."
+                     data-fa="توجه: این یک نمونه بازسازی‌شده و بی‌نام بر اساس تجربه حرفه‌ای است؛ سند محرمانه ایرلاین نبوده و هیچ ادعای سنجه عملکردی ندارد.">
+                    <strong>Notice:</strong> This is a reconstructed, anonymized demonstration based on professional experience; not a confidential airline document, and no performance metric is claimed.
+                </div>
+            </div>
+        </section>
+
+        <main class="max-w-6xl mx-auto px-6 pb-24 space-y-16">
+
+            <!-- Section 01 -->
+            <section id="section-01" class="glass-panel glass-panel-hover rounded-2xl p-8 lg:p-10">
+                <div class="flex flex-wrap items-center justify-between border-b border-purple-900/50 pb-4 mb-8 gap-4">
+                    <div>
+                        <span class="text-xs font-mono text-purple-400 tracking-wider uppercase block">Phase 01</span>
+                        <h2 class="text-2xl font-bold text-white">01 | Context & Objective</h2>
+                    </div>
+                    <span class="text-purple-300/70 font-mono text-sm" data-en="۰۱ | زمینه و هدف" data-fa="۰۱ | زمینه و هدف">۰۱ | زمینه و هدف</span>
+                </div>
+
+                <div id="section-01-content" class="grid md:grid-cols-2 gap-8">
+                    <div class="space-y-6">
+                        <div class="glass-card p-6 rounded-xl border-l-4 border-l-purple-500">
+                            <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-circle-nodes text-purple-400"></i>
+                                Operational Context
+                            </h3>
+                            <p class="text-slate-300 text-sm leading-relaxed">
+                                In high-stakes operational environments, recurring checks frequently become inconsistent when personnel rely on memory, personal paper notes, or fragmented verbal reporting. This sample demonstrates converting routine checks into structured, traceable, and audited digital workflows.
+                            </p>
+                        </div>
+
+                        <div class="glass-card p-6 rounded-xl border-l-4 border-l-indigo-500">
+                            <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-bullseye text-indigo-400"></i>
+                                Core Objective
+                            </h3>
+                            <p class="text-slate-300 text-sm leading-relaxed">
+                                Establish a control package clarifying standard inspection criteria, recording accountability, exception escalation protocols, and supervisory sign-off mechanisms.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-6 font-fa fa-mode bg-obsidian-900/60 p-6 rounded-xl border border-purple-900/40">
+                        <div class="border-r-4 border-r-purple-500 pr-4">
+                            <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-circle-nodes text-purple-400"></i>
+                                زمینه عملیاتی
+                            </h3>
+                            <p class="text-slate-300 text-sm leading-relaxed">
+                                در محیط‌های حساس عملیاتی، زمانی که کنترل‌های تکرارشونده متکی به حافظه، یادداشت‌های کاغذی یا گزارش‌های غیریکپارچه باشند، کیفیت اجرا دچار افت می‌شود. هدف این نمونه، تبدیل فرآیندهای معمول به گردش‌کارهای ساختاریافته و قابل پیگیری دیجیتال است.
+                            </p>
+                        </div>
+
+                        <div class="border-r-4 border-r-indigo-500 pr-4 pt-4 border-t border-purple-900/40">
+                            <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-bullseye text-indigo-400"></i>
+                                هدف اصلی
+                            </h3>
+                            <p class="text-slate-300 text-sm leading-relaxed">
+                                تهیه یک بسته کنترلی کارآمد که مشخص کند چه مواردی باید بازرسی شوند، مسئولیت ثبت با کیست، مغایرت‌ها چطور ارجاع می‌شوند و سرپرست چطور صحت کار را تأیید می‌کند.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 02 -->
+            <section id="section-02" class="glass-panel glass-panel-hover rounded-2xl p-8 lg:p-10">
+                <div class="flex flex-wrap items-center justify-between border-b border-purple-900/50 pb-4 mb-8 gap-4">
+                    <div>
+                        <span class="text-xs font-mono text-purple-400 tracking-wider uppercase block">Phase 02</span>
+                        <h2 class="text-2xl font-bold text-white">02 | Proposed Workflow Architecture</h2>
+                    </div>
+                    <span class="text-purple-300/70 font-mono text-sm" data-en="۰۲ | گردش کار پیشنهادی" data-fa="۰۲ | گردش کار پیشنهادی">۰۲ | گردش کار پیشنهادی</span>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-3 mb-8">
+                    <button onclick="selectWorkflowStep(1)" class="step-btn p-4 rounded-xl glass-card text-left border border-purple-500/50 bg-purple-500/10 transition-all">
+                        <span class="text-[10px] font-mono text-purple-300 block mb-1">STEP 01</span>
+                        <span class="text-xs font-bold text-white block">1. Prepare</span>
+                        <span class="text-[11px] text-slate-400 block font-fa">آماده‌سازی</span>
+                    </button>
+                    <button onclick="selectWorkflowStep(2)" class="step-btn p-4 rounded-xl glass-card text-left border border-purple-900/40 hover:border-purple-500/30 transition-all">
+                        <span class="text-[10px] font-mono text-slate-500 block mb-1">STEP 02</span>
+                        <span class="text-xs font-bold text-white block">2. Verify</span>
+                        <span class="text-[11px] text-slate-400 block font-fa">بررسی</span>
+                    </button>
+                    <button onclick="selectWorkflowStep(3)" class="step-btn p-4 rounded-xl glass-card text-left border border-purple-900/40 hover:border-purple-500/30 transition-all">
+                        <span class="text-[10px] font-mono text-slate-500 block mb-1">STEP 03</span>
+                        <span class="text-xs font-bold text-white block">3. Record</span>
+                        <span class="text-[11px] text-slate-400 block font-fa">ثبت</span>
+                    </button>
+                    <button onclick="selectWorkflowStep(4)" class="step-btn p-4 rounded-xl glass-card text-left border border-purple-900/40 hover:border-purple-500/30 transition-all">
+                        <span class="text-[10px] font-mono text-slate-500 block mb-1">STEP 04</span>
+                        <span class="text-xs font-bold text-white block">4. Escalate</span>
+                        <span class="text-[11px] text-slate-400 block font-fa">ارجاع</span>
+                    </button>
+                    <button onclick="selectWorkflowStep(5)" class="step-btn p-4 rounded-xl glass-card text-left border border-purple-900/40 hover:border-purple-500/30 transition-all col-span-2 md:col-span-1">
+                        <span class="text-[10px] font-mono text-slate-500 block mb-1">STEP 05</span>
+                        <span class="text-xs font-bold text-white block">5. Review</span>
+                        <span class="text-[11px] text-slate-400 block font-fa">بازبینی</span>
+                    </button>
+                </div>
+
+                <div id="step-detail-container" class="glass-card p-6 rounded-xl border border-purple-500/30">
+                    <!-- Rendered dynamically -->
+                </div>
+            </section>
+
+            <!-- Section 03 -->
+            <section id="section-03" class="glass-panel glass-panel-hover rounded-2xl p-8 lg:p-10">
+                <div class="flex flex-wrap items-center justify-between border-b border-purple-900/50 pb-4 mb-6 gap-4">
+                    <div>
+                        <span class="text-xs font-mono text-purple-400 tracking-wider uppercase block">Phase 03</span>
+                        <h2 class="text-2xl font-bold text-white">03 | Interactive Audit & Checklist Matrix</h2>
+                    </div>
+                    <span class="text-purple-300/70 font-mono text-sm" data-en="۰۳ | نمونه قالب چک‌لیست" data-fa="۰۳ | نمونه قالب چک‌لیست">۰۳ | نمونه قالب چک‌لیست</span>
+                </div>
+
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-6 text-xs">
+                    <div class="flex items-center gap-2">
+                        <span class="text-slate-400 font-mono">Filter:</span>
+                        <button onclick="filterChecklist('ALL')" class="px-3 py-1.5 rounded-lg bg-obsidian-800 border border-purple-900/60 hover:border-purple-500 text-white">All Items</button>
+                        <button onclick="filterChecklist('FAIL')" class="px-3 py-1.5 rounded-lg bg-red-950/60 border border-red-800/80 text-red-300 hover:border-red-500">Exceptions Only</button>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button onclick="exportChecklistCSV()" class="px-3 py-1.5 rounded-lg bg-purple-600/20 border border-purple-500/50 text-purple-300 hover:bg-purple-600/30 flex items-center gap-2">
+                            <i class="fa-solid fa-download"></i> Export CSV
+                        </button>
+                        <button onclick="copyChecklistReport()" class="px-3 py-1.5 rounded-lg bg-obsidian-800 border border-purple-900/60 hover:border-purple-500 text-slate-300 flex items-center gap-2">
+                            <i class="fa-solid fa-copy"></i> Copy Summary
+                        </button>
+                    </div>
+                </div>
+
+                <div class="overflow-x-auto rounded-xl border border-purple-900/40 bg-obsidian-900/60 backdrop-blur-md mb-6">
+                    <table class="w-full text-left text-xs text-slate-300">
+                        <thead class="bg-obsidian-800/80 text-purple-300/80 uppercase font-mono border-b border-purple-900/50">
+                            <tr>
+                                <th class="p-4">Check Item / مورد کنترلی</th>
+                                <th class="p-4">Status / وضعیت</th>
+                                <th class="p-4">Notes & Exceptions / شرح مغایرت</th>
+                                <th class="p-4 text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="checklist-table-body" class="divide-y divide-purple-900/30">
+                            <!-- Table rows inserted via JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="p-4 rounded-xl glass-card border border-purple-900/40 flex flex-wrap gap-3 items-center">
+                    <input type="text" id="new-item-title" placeholder="New Check Item Title (e.g., Oxygen Mask Pressure)" class="bg-obsidian-900 border border-purple-900/60 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 flex-1 min-w-[200px]">
+                    <input type="text" id="new-item-criteria" placeholder="Acceptance Criteria (e.g., > 1500 PSI)" class="bg-obsidian-900 border border-purple-900/60 rounded-lg px-3 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 flex-1 min-w-[200px]">
+                    <button onclick="addCustomCheckItem()" class="px-4 py-2 rounded-lg bg-purple-600 text-white font-bold text-xs hover:bg-purple-500 transition-colors">
+                        <i class="fa-solid fa-plus mr-1"></i> Add Item
+                    </button>
+                </div>
+            </section>
+
+            <!-- Section 04 -->
+            <section id="section-04" class="glass-panel glass-panel-hover rounded-2xl p-8 lg:p-10">
+                <div class="flex flex-wrap items-center justify-between border-b border-purple-900/50 pb-4 mb-8 gap-4">
+                    <div>
+                        <span class="text-xs font-mono text-purple-400 tracking-wider uppercase block">Phase 04</span>
+                        <h2 class="text-2xl font-bold text-white">04 | Digital Form & Excel Tracker Architecture</h2>
+                    </div>
+                    <span class="text-purple-300/70 font-mono text-sm" data-en="۰۴ | طراحی فرم دیجیتال" data-fa="۰۴ | طراحی فرم دیجیتال">۰۴ | طراحی فرم دیجیتال</span>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-xs">
+                    <div class="glass-card p-5 rounded-xl border-t-2 border-t-purple-500">
+                        <div class="font-bold text-white mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-barcode text-purple-400"></i>
+                            Record ID / شناسه رکورد
+                        </div>
+                        <p class="text-slate-400 font-mono text-[11px]">Unique traceability identifier (e.g., OPS-2026-001)</p>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-xl border-t-2 border-t-indigo-500">
+                        <div class="font-bold text-white mb-1 flex items-center gap-2">
+                            <i class="fa-regular fa-calendar-days text-indigo-400"></i>
+                            Date & Shift / تاریخ و شیفت
+                        </div>
+                        <p class="text-slate-400 font-mono text-[11px]">Timestamp & duty shift identifier (e.g., 2026-10-13 / Shift A)</p>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-xl border-t-2 border-t-violet-500">
+                        <div class="font-bold text-white mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-user-check text-violet-400"></i>
+                            Responsible Person / مسئول انجام
+                        </div>
+                        <p class="text-slate-400 text-[11px]">Direct accountability logging via Staff ID / Role</p>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-xl border-t-2 border-t-emerald-500">
+                        <div class="font-bold text-white mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-square-check text-emerald-400"></i>
+                            Checklist Result / نتیجه
+                        </div>
+                        <p class="text-slate-400 text-[11px]">Standardized data capture (Pass / Fail / N/A)</p>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-xl border-t-2 border-t-red-500">
+                        <div class="font-bold text-white mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-circle-exclamation text-red-400"></i>
+                            Exception Details / شرح مغایرت
+                        </div>
+                        <p class="text-slate-400 text-[11px]">Objective description of deviations without assumptions</p>
+                    </div>
+
+                    <div class="glass-card p-5 rounded-xl border-t-2 border-t-purple-400">
+                        <div class="font-bold text-white mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-user-gear text-purple-300"></i>
+                            Action Owner & Due Date / مسئول اقدام
+                        </div>
+                        <p class="text-slate-400 text-[11px]">Follow-up role assignment with strict completion deadline</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 05 -->
+            <section id="section-05" class="glass-panel glass-panel-hover rounded-2xl p-8 lg:p-10">
+                <div class="flex flex-wrap items-center justify-between border-b border-purple-900/50 pb-4 mb-8 gap-4">
+                    <div>
+                        <span class="text-xs font-mono text-purple-400 tracking-wider uppercase block">Phase 05</span>
+                        <h2 class="text-2xl font-bold text-white">05 | Demonstrated Capabilities</h2>
+                    </div>
+                    <span class="text-purple-300/70 font-mono text-sm" data-en="۰۵ | توانمندی‌های اصلی" data-fa="۰۵ | توانمندی‌های اصلی">۰۵ | توانمندی‌های اصلی</span>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6 text-xs">
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3 glass-card p-4 rounded-xl">
+                            <i class="fa-solid fa-check text-purple-400 mt-1"></i>
+                            <div>
+                                <strong class="text-white block mb-1">Operational Decomposition</strong>
+                                <p class="text-slate-400">Converting complex operational mandates into clear, observable, step-by-step actions.</p>
+                                <span class="text-slate-500 font-fa block text-[11px] mt-1">تبدیل نیاز عملیاتی به مراحل قابل مشاهده و بررسی.</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3 glass-card p-4 rounded-xl">
+                            <i class="fa-solid fa-check text-purple-400 mt-1"></i>
+                            <div>
+                                <strong class="text-white block mb-1">Role & Duty Separation</strong>
+                                <p class="text-slate-400">Decoupling execution, recordkeeping, escalation pathways, and supervisory validation.</p>
+                                <span class="text-slate-500 font-fa block text-[11px] mt-1">تفکیک اجرای کار، ثبت سوابق، ارجاع مسئله و بازبینی سرپرستی.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3 glass-card p-4 rounded-xl">
+                            <i class="fa-solid fa-check text-purple-400 mt-1"></i>
+                            <div>
+                                <strong class="text-white block mb-1">Data Schema Optimization</strong>
+                                <p class="text-slate-400">Designing clean input fields that streamline auditing, reporting, and accountability.</p>
+                                <span class="text-slate-500 font-fa block text-[11px] mt-1">طراحی فیلدهایی برای تسهیل پیگیری و پاسخ‌گویی.</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-3 glass-card p-4 rounded-xl">
+                            <i class="fa-solid fa-check text-purple-400 mt-1"></i>
+                            <div>
+                                <strong class="text-white block mb-1">Traceability Balance</strong>
+                                <p class="text-slate-400">Keeping documentation lightweight for high-speed front-line use while preserving strict compliance logs.</p>
+                                <span class="text-slate-500 font-fa block text-[11px] mt-1">ساده نگه‌داشتن ابزار برای استفاده روزمره همراه با حفظ ردیابی.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section 06 -->
+            <section id="section-06" class="glass-panel glass-panel-hover rounded-2xl p-8 lg:p-10">
+                <div class="flex flex-wrap items-center justify-between border-b border-purple-900/50 pb-4 mb-8 gap-4">
+                    <div>
+                        <span class="text-xs font-mono text-purple-400 tracking-wider uppercase block">Phase 06</span>
+                        <h2 class="text-2xl font-bold text-white">06 | Interactive Scope & Delivery Calculator</h2>
+                    </div>
+                    <span class="text-purple-300/70 font-mono text-sm" data-en="۰۶ | محدوده پروژه و تخمین" data-fa="۰۶ | محدوده پروژه و تخمین">۰۶ | محدوده پروژه و تخمین</span>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-8 text-xs">
+                    <div class="space-y-6 bg-obsidian-900/60 p-6 rounded-xl border border-purple-900/40">
+                        <div>
+                            <label class="font-bold text-white block mb-2">1. Number of Workflows / Checklists</label>
+                            <input type="range" id="input-workflows" min="1" max="10" value="1" oninput="calculateScope()" class="w-full accent-purple-500">
+                            <div class="flex justify-between text-slate-400 font-mono text-[11px] mt-1">
+                                <span>1 Workflow</span>
+                                <span id="val-workflows" class="text-purple-400 font-bold">1 Workflow</span>
+                                <span>10 Workflows</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="font-bold text-white block mb-2">2. SOP Detail Depth</label>
+                            <div class="grid grid-cols-3 gap-2">
+                                <button onclick="setDepth('standard')" id="depth-standard" class="p-2.5 rounded-lg glass-card border border-purple-500/50 bg-purple-500/10 text-white font-semibold">Standard SOP</button>
+                                <button onclick="setDepth('detailed')" id="depth-detailed" class="p-2.5 rounded-lg glass-card border border-purple-900/40 text-slate-400 hover:text-white">Detailed Matrix</button>
+                                <button onclick="setDepth('enterprise')" id="depth-enterprise" class="p-2.5 rounded-lg glass-card border border-purple-900/40 text-slate-400 hover:text-white">Enterprise Regulatory</button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2 pt-2 border-t border-purple-900/40">
+                            <label class="font-bold text-white block">3. Additional Deliverables</label>
+                            <label class="flex items-center gap-2 text-slate-300">
+                                <input type="checkbox" id="check-excel" onchange="calculateScope()" checked class="accent-purple-500 rounded"> Custom Excel Log / Tracker Template
+                            </label>
+                            <label class="flex items-center gap-2 text-slate-300">
+                                <input type="checkbox" id="check-training" onchange="calculateScope()" class="accent-purple-500 rounded"> Staff Briefing / Training Slide Deck
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="glass-card p-6 rounded-xl border border-purple-500/30 flex flex-col justify-between">
+                        <div>
+                            <span class="text-xs font-mono text-purple-400 uppercase tracking-widest block mb-1">Estimated Deliverables</span>
+                            <h3 class="text-xl font-bold text-white mb-6">Project Execution Summary</h3>
+
+                            <div class="space-y-4 font-mono text-xs">
+                                <div class="flex justify-between border-b border-purple-900/40 pb-2">
+                                    <span class="text-slate-400">Estimated Timeline:</span>
+                                    <span id="res-timeline" class="text-purple-300 font-bold">3 - 5 Business Days</span>
+                                </div>
+                                <div class="flex justify-between border-b border-purple-900/40 pb-2">
+                                    <span class="text-slate-400">Revision Iterations:</span>
+                                    <span id="res-reviews" class="text-white">2 Iteration Cycles</span>
+                                </div>
+                                <div class="flex justify-between border-b border-purple-900/40 pb-2">
+                                    <span class="text-slate-400">Format Package:</span>
+                                    <span id="res-format" class="text-indigo-400">PDF SOP + Custom Excel Tracker</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-6">
+                            <a href="#contact" onclick="prefillContactSubject()" class="block w-full text-center bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-purple-500/20 transition-all">
+                                Request Proposal with These Parameters
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section id="contact" class="glass-panel rounded-2xl p-8 lg:p-12 text-center relative overflow-hidden">
+                <div class="max-w-2xl mx-auto space-y-6 relative z-10">
+                    <span class="text-xs font-mono text-purple-400 uppercase tracking-widest block">Direct Collaboration</span>
+                    <h2 class="text-3xl font-bold text-white">Start a Project Consultation</h2>
+                    <p class="text-slate-300 text-sm leading-relaxed">
+                        Remote, project-based operations documentation, SOP design, and process optimization for English and Persian operational environments.
+                    </p>
+
+                    <div class="pt-4 flex flex-wrap justify-center gap-4 text-xs font-mono">
+                        <a href="https://www.ayehvega.ir" target="_blank" class="px-4 py-2.5 rounded-xl bg-obsidian-900/80 border border-purple-900/60 hover:border-purple-500 text-purple-300 flex items-center gap-2 transition-all">
+                            <i class="fa-solid fa-globe text-purple-400"></i> www.ayehvega.ir
+                        </a>
+                        <button onclick="copyToClipboard('ayehsadeghi9@gmail.com')" class="px-4 py-2.5 rounded-xl bg-obsidian-900/80 border border-purple-900/60 hover:border-purple-500 text-slate-300 flex items-center gap-2 transition-all">
+                            <i class="fa-regular fa-envelope text-purple-400"></i> ayehsadeghi9@gmail.com
+                        </button>
+                        <button onclick="copyToClipboard('+989000000000')" class="px-4 py-2.5 rounded-xl bg-obsidian-900/80 border border-purple-900/60 hover:border-purple-500 text-slate-300 flex items-center gap-2 transition-all">
+                            <i class="fa-brands fa-whatsapp text-emerald-400"></i> Direct Line / WhatsApp
+                        </button>
+                    </div>
+
+                    <form onsubmit="handleFormSubmit(event)" class="pt-6 max-w-md mx-auto space-y-3 text-xs text-left">
+                        <input type="text" id="form-name" required placeholder="Your Name or Company" class="w-full bg-obsidian-900 border border-purple-900/60 rounded-lg px-3 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500">
+                        <input type="text" id="form-subject" required placeholder="Project Subject" class="w-full bg-obsidian-900 border border-purple-900/60 rounded-lg px-3 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500">
+                        <textarea id="form-message" rows="3" required placeholder="Brief outline of your operational documentation needs..." class="w-full bg-obsidian-900 border border-purple-900/60 rounded-lg px-3 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"></textarea>
+                        <button type="submit" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-2.5 rounded-lg transition-colors shadow-lg shadow-purple-600/30">
+                            Send Direct Inquiry
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="border-t border-purple-900/40 bg-obsidian-900/90 py-8 px-6 text-center text-xs text-slate-500 space-y-2 backdrop-blur-md">
+            <p>© 2026 Ayeh Sadeghi | Operations Documentation & Process Design. All Rights Reserved.</p>
+            <p class="font-mono text-[10px] text-purple-400/80">
+                ayehsadeghi9@gmail.com • <a href="https://www.ayehvega.ir" target="_blank" class="underline hover:text-purple-300">www.ayehvega.ir</a> • Remote Operations Specialist
+            </p>
+        </footer>
+    </div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 glass-panel px-4 py-3 rounded-xl border border-purple-500/50 flex items-center gap-3 text-xs text-white shadow-2xl">
+        <i id="toast-icon" class="fa-solid fa-circle-check text-purple-400 text-base"></i>
+        <span id="toast-message">Notification message</span>
+    </div>
+
+    <script>
+        let scene, camera, renderer;
+        let particles, linesMesh;
+        let particlePositions, particleVelocities;
+        const maxParticleCount = 180;
+        const maxDistance = 14;
+        let mouseX = 0, mouseY = 0;
+        let targetX = 0, targetY = 0;
+
+        function initMinimalNeuronBackground() {
+            const canvas = document.getElementById('webgl-bg');
+            scene = new THREE.Scene();
+            scene.fog = new THREE.FogExp2(0x090714, 0.012);
+
+            camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 1000);
+            camera.position.z = 50;
+
+            renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            renderer.setSize(window.innerWidth, window.innerHeight);
+
+            // Neural Network Particles Geometry
+            const particleGeometry = new THREE.BufferGeometry();
+            particlePositions = new Float32Array(maxParticleCount * 3);
+            particleVelocities = [];
+
+            for (let i = 0; i < maxParticleCount; i++) {
+                const x = (Math.random() - 0.5) * 90;
+                const y = (Math.random() - 0.5) * 90;
+                const z = (Math.random() - 0.5) * 90;
+
+                particlePositions[i * 3] = x;
+                particlePositions[i * 3 + 1] = y;
+                particlePositions[i * 3 + 2] = z;
+
+                particleVelocities.push({
+                    x: (Math.random() - 0.5) * 0.04,
+                    y: (Math.random() - 0.5) * 0.04,
+                    z: (Math.random() - 0.5) * 0.04
+                });
+            }
+
+            particleGeometry.setAttribute('position', new THREE.BufferAttribute(particlePositions, 3).setUsage(THREE.DynamicDrawUsage));
+
+            // Purple Neuron Point Nodes
+            const pMaterial = new THREE.PointsMaterial({
+                color: 0xc084fc,
+                size: 1.4,
+                transparent: true,
+                opacity: 0.85,
+                blending: THREE.AdditiveBlending
+            });
+
+            particles = new THREE.Points(particleGeometry, pMaterial);
+            scene.add(particles);
+
+            // Neural Connections (Synapses) Lines
+            const linesGeometry = new THREE.BufferGeometry();
+            const linesMaterial = new THREE.LineSegmentsMaterial ? new THREE.LineBasicMaterial({
+                color: 0x8b5cf6,
+                transparent: true,
+                opacity: 0.25,
+                blending: THREE.AdditiveBlending
+            }) : new THREE.LineBasicMaterial({
+                color: 0x8b5cf6,
+                transparent: true,
+                opacity: 0.25,
+                blending: THREE.AdditiveBlending
+            });
+
+            linesMesh = new THREE.LineSegments(linesGeometry, linesMaterial);
+            scene.add(linesMesh);
+
+            window.addEventListener('resize', onWindowResize);
+            document.addEventListener('mousemove', onMouseMove);
+
+            animateNeurons();
+        }
+
+        function onMouseMove(event) {
+            mouseX = (event.clientX - window.innerWidth / 2) * 0.03;
+            mouseY = (event.clientY - window.innerHeight / 2) * 0.03;
+
+            const cursorGlow = document.getElementById('cursor-glow');
+            if (cursorGlow) {
+                cursorGlow.style.left = event.clientX + 'px';
+                cursorGlow.style.top = event.clientY + 'px';
+            }
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animateNeurons() {
+            requestAnimationFrame(animateNeurons);
+
+            targetX += (mouseX - targetX) * 0.04;
+            targetY += (mouseY - targetY) * 0.04;
+
+            camera.position.x += (targetX - camera.position.x) * 0.02;
+            camera.position.y += (-targetY - camera.position.y) * 0.02;
+            camera.lookAt(scene.position);
+
+            let linePos = [];
+            const positions = particles.geometry.attributes.position.array;
+
+            // Move Neural Nodes
+            for (let i = 0; i < maxParticleCount; i++) {
+                positions[i * 3] += particleVelocities[i].x;
+                positions[i * 3 + 1] += particleVelocities[i].y;
+                positions[i * 3 + 2] += particleVelocities[i].z;
+
+                if (Math.abs(positions[i * 3]) > 55) particleVelocities[i].x *= -1;
+                if (Math.abs(positions[i * 3 + 1]) > 55) particleVelocities[i].y *= -1;
+                if (Math.abs(positions[i * 3 + 2]) > 55) particleVelocities[i].z *= -1;
+            }
+
+            // Connect nearby nodes with synaptic lines
+            for (let i = 0; i < maxParticleCount; i++) {
+                for (let j = i + 1; j < maxParticleCount; j++) {
+                    const dx = positions[i * 3] - positions[j * 3];
+                    const dy = positions[i * 3 + 1] - positions[j * 3 + 1];
+                    const dz = positions[i * 3 + 2] - positions[j * 3 + 2];
+                    const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+                    if (dist < maxDistance) {
+                        linePos.push(
+                            positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2],
+                            positions[j * 3], positions[j * 3 + 1], positions[j * 3 + 2]
+                        );
+                    }
+                }
+            }
+
+            particles.geometry.attributes.position.needsUpdate = true;
+
+            linesMesh.geometry.dispose();
+            linesMesh.geometry = new THREE.BufferGeometry();
+            linesMesh.geometry.setAttribute('position', new THREE.Float32BufferAttribute(linePos, 3));
+
+            renderer.render(scene, camera);
+        }
+
+        let currentLang = 'en';
+        let activeWorkflowStep = 1;
+        let checklistFilter = 'ALL';
+        
+        let checklistData = [
+            { id: 1, title: 'Emergency Equipment Seals', criteria: 'Tamper-evident seals intact and verified active', status: 'PASS', notes: 'All 4 cabin zones verified.' },
+            { id: 2, title: 'First Aid Kit Inventory', criteria: 'Expiry dates valid (> 6 months remaining)', status: 'PASS', notes: 'Kit #2 inspected.' },
+            { id: 3, title: 'PA System Clarity Test', criteria: 'Audio intelligible in all cabin sectors', status: 'FAIL', notes: 'Aft cabin speaker distorted during briefing.' },
+            { id: 4, title: 'Pre-Flight Briefing Log', criteria: 'All crew signatures present with timestamp', status: 'PASS', notes: 'Logged by Senior Crew.' }
+        ];
+
+        const workflowData = {
+            1: {
+                title_en: "01. Prepare & Briefing",
+                title_fa: "۰۱. آماده‌سازی و بریفینگ",
+                action_en: "Open approved checklist ID, confirm scope of task, and verify cabin zone responsibility.",
+                action_fa: "بازکردن چک‌لیست معتبر، تأیید محدوده مسئولیت و حوزه‌های کابین.",
+                record_en: "Checklist Unique ID, Execution Date, Assigned Staff ID",
+                record_fa: "شناسه یکتای چک‌لیست، تاریخ، شناسه مسئول",
+                icon: "fa-folder-open"
+            },
+            2: {
+                title_en: "02. Verify Compliance",
+                title_fa: "۰۲. بررسی و تطابق استاندارد",
+                action_en: "Perform physical inspection against explicit acceptance criteria. Avoid ambiguous assumptions.",
+                action_fa: "انجام بازرسی فیزیکی تطبیقی با معیارهای صریح پذیرش.",
+                record_en: "Pass / Fail / Not Applicable Status Flag",
+                record_fa: "ثبت وضعیت: قبول / رد / نامربوط",
+                icon: "fa-magnifying-glass"
+            },
+            3: {
+                title_en: "03. Real-Time Recordkeeping",
+                title_fa: "۰۳. ثبت هم‌زمان سوابق",
+                action_en: "Log check results immediately upon completion using standard nomenclature.",
+                action_fa: "ثبت بلافاصله نتایج کنترل هم‌زمان با انجام کار.",
+                record_en: "Precise Timestamp, Inspector Initials",
+                record_fa: "زمان دقیق تکمیل و شناسه بازرس",
+                icon: "fa-pen-to-square"
+            },
+            4: {
+                title_en: "04. Exception Escalation",
+                title_fa: "۰۴. ارجاع مغایرت‌ها",
+                action_en: "Flag non-compliant items immediately. Initiate corrective action log without marking complete.",
+                action_fa: "علامت‌گذاری موارد ردشده و ایجاد پرونده ارجاع تا رفع کامل مسئله.",
+                record_en: "Deviation Report ID, Action Owner, Due Date",
+                record_fa: "شرح مغایرت، مسئول پیگیری و مهلت اصلاح",
+                icon: "fa-triangle-exclamation"
+            },
+            5: {
+                title_en: "05. Supervisory Sign-Off",
+                title_fa: "۰۵. بازبینی و تأیید سرپرستی",
+                action_en: "Senior supervisor reviews log completeness, unresolved items, and signs off.",
+                action_fa: "بازبینی و بازرسی نهایی توسط سرپرست ارشد و تأیید سوابق.",
+                record_en: "Reviewer Signature, Closure Timestamp",
+                record_fa: "امضای بازبین و زمان بسته‌شدن گزارش",
+                icon: "fa-user-shield"
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            ['en', 'dual', 'fa'].forEach(l => {
+                const btn = document.getElementById(`lang-${l}`);
+                if (l === lang) {
+                    btn.className = "px-2.5 py-1 rounded transition-colors bg-purple-600 text-white font-bold";
+                } else {
+                    btn.className = "px-2.5 py-1 rounded transition-colors text-slate-400 hover:text-white";
+                }
+            });
+
+            document.querySelectorAll('[data-en]').forEach(el => {
+                if (lang === 'fa') {
+                    el.innerText = el.getAttribute('data-fa');
+                    el.classList.add('font-fa');
+                } else if (lang === 'en') {
+                    el.innerText = el.getAttribute('data-en');
+                    el.classList.remove('font-fa');
+                } else {
+                    el.innerText = `${el.getAttribute('data-en')} | ${el.getAttribute('data-fa')}`;
+                }
+            });
+
+            const s1Content = document.getElementById('section-01-content');
+            if (lang === 'fa') {
+                document.body.classList.add('fa-mode');
+                if(s1Content) s1Content.classList.add('fa-mode');
+            } else {
+                document.body.classList.remove('fa-mode');
+                if(s1Content) s1Content.classList.remove('fa-mode');
+            }
+
+            renderWorkflowStep();
+            showToast(`Language set to ${lang.toUpperCase()}`);
+        }
+
+        function selectWorkflowStep(stepNum) {
+            activeWorkflowStep = stepNum;
+            document.querySelectorAll('.step-btn').forEach((btn, index) => {
+                if (index + 1 === stepNum) {
+                    btn.className = "step-btn p-4 rounded-xl glass-card text-left border border-purple-500/50 bg-purple-500/10 transition-all";
+                } else {
+                    btn.className = "step-btn p-4 rounded-xl glass-card text-left border border-purple-900/40 hover:border-purple-500/30 transition-all";
+                }
+            });
+
+            renderWorkflowStep();
+        }
+
+        function renderWorkflowStep() {
+            const step = workflowData[activeWorkflowStep];
+            const container = document.getElementById('step-detail-container');
+            
+            const title = (currentLang === 'fa') ? step.title_fa : step.title_en;
+            const action = (currentLang === 'fa') ? step.action_fa : step.action_en;
+            const record = (currentLang === 'fa') ? step.record_fa : step.record_en;
+
+            container.innerHTML = `
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/40 flex items-center justify-center text-purple-300 text-xl shadow-lg shadow-purple-500/10">
+                        <i class="fa-solid ${step.icon}"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs font-mono text-purple-400 uppercase tracking-widest">Pipeline Step 0${activeWorkflowStep}</span>
+                        <h3 class="text-xl font-bold text-white">${title}</h3>
+                    </div>
+                </div>
+                <div class="grid md:grid-cols-2 gap-6 text-xs pt-2">
+                    <div class="bg-obsidian-900/80 p-4 rounded-xl border border-purple-900/40 backdrop-blur-md">
+                        <span class="text-slate-400 uppercase tracking-wider text-[10px] font-mono block mb-1">Action Protocol / اقدام</span>
+                        <p class="text-slate-200 leading-relaxed">${action}</p>
+                    </div>
+                    <div class="bg-obsidian-900/80 p-4 rounded-xl border border-purple-900/40 backdrop-blur-md">
+                        <span class="text-slate-400 uppercase tracking-wider text-[10px] font-mono block mb-1">Required Control Record / ثبت</span>
+                        <p class="text-purple-300 font-mono leading-relaxed">${record}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderChecklistTable() {
+            const tbody = document.getElementById('checklist-table-body');
+            tbody.innerHTML = '';
+
+            const filtered = checklistData.filter(item => {
+                if (checklistFilter === 'FAIL') return item.status === 'FAIL';
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-8 text-center text-slate-500">No check items found for this filter.</td></tr>`;
+                return;
+            }
+
+            filtered.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-obsidian-800/40 transition-colors";
+
+                let statusBadge = '';
+                if (item.status === 'PASS') {
+                    statusBadge = `<span class="px-2 py-1 rounded bg-emerald-950 text-emerald-400 border border-emerald-800 font-bold font-mono">PASS</span>`;
+                } else if (item.status === 'FAIL') {
+                    statusBadge = `<span class="px-2 py-1 rounded bg-red-950 text-red-400 border border-red-800 font-bold font-mono">FAIL</span>`;
+                } else {
+                    statusBadge = `<span class="px-2 py-1 rounded bg-slate-800 text-slate-400 border border-slate-700 font-bold font-mono">N/A</span>`;
+                }
+
+                tr.innerHTML = `
+                    <td class="p-4">
+                        <div class="font-bold text-white">${item.title}</div>
+                        <div class="text-[11px] text-slate-400">${item.criteria}</div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-1">
+                            <button onclick="updateCheckStatus(${item.id}, 'PASS')" class="p-1 hover:text-emerald-400 ${item.status === 'PASS' ? 'text-emerald-400' : 'text-slate-600'}"><i class="fa-solid fa-circle-check"></i></button>
+                            <button onclick="updateCheckStatus(${item.id}, 'FAIL')" class="p-1 hover:text-red-400 ${item.status === 'FAIL' ? 'text-red-400' : 'text-slate-600'}"><i class="fa-solid fa-circle-xmark"></i></button>
+                            <button onclick="updateCheckStatus(${item.id}, 'N/A')" class="p-1 hover:text-slate-300 ${item.status === 'N/A' ? 'text-slate-300' : 'text-slate-600'}"><i class="fa-solid fa-ban"></i></button>
+                            <span class="ml-2">${statusBadge}</span>
+                        </div>
+                    </td>
+                    <td class="p-4 text-slate-300">
+                        <input type="text" value="${item.notes}" onchange="updateCheckNotes(${item.id}, this.value)" class="bg-obsidian-900 border border-purple-900/60 rounded px-2 py-1 text-xs w-full text-slate-300 focus:border-purple-500">
+                    </td>
+                    <td class="p-4 text-center">
+                        <button onclick="deleteCheckItem(${item.id})" class="text-slate-500 hover:text-red-400 p-1">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateCheckStatus(id, newStatus) {
+            const item = checklistData.find(i => i.id === id);
+            if (item) {
+                item.status = newStatus;
+                renderChecklistTable();
+                showToast(`Item #${id} updated to ${newStatus}`);
+            }
+        }
+
+        function updateCheckNotes(id, text) {
+            const item = checklistData.find(i => i.id === id);
+            if (item) {
+                item.notes = text;
+                showToast(`Notes updated for Item #${id}`);
+            }
+        }
+
+        function addCustomCheckItem() {
+            const titleInput = document.getElementById('new-item-title');
+            const criteriaInput = document.getElementById('new-item-criteria');
+
+            if (!titleInput.value.trim()) {
+                showToast('Please enter a check item title.', 'error');
+                return;
+            }
+
+            const newItem = {
+                id: Date.now(),
+                title: titleInput.value.trim(),
+                criteria: criteriaInput.value.trim() || 'Standard operational parameters',
+                status: 'PASS',
+                notes: 'Custom inspection record created.'
+            };
+
+            checklistData.push(newItem);
+            titleInput.value = '';
+            criteriaInput.value = '';
+            renderChecklistTable();
+            showToast('New Check Item added.');
+        }
+
+        function deleteCheckItem(id) {
+            checklistData = checklistData.filter(i => i.id !== id);
+            renderChecklistTable();
+            showToast('Check Item deleted.');
+        }
+
+        function filterChecklist(filter) {
+            checklistFilter = filter;
+            renderChecklistTable();
+            showToast(`Filter applied: ${filter}`);
+        }
+
+        function exportChecklistCSV() {
+            let csv = "ID,Check Item,Acceptance Criteria,Status,Exception Notes\n";
+            checklistData.forEach(i => {
+                csv += `"${i.id}","${i.title}","${i.criteria}","${i.status}","${i.notes}"\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', `Audit_Report_AyehVega_${Date.now()}.csv`);
+            a.click();
+            showToast('CSV Report Downloaded');
+        }
+
+        function copyChecklistReport() {
+            let summary = `OPERATIONAL AUDIT SUMMARY - www.ayehvega.ir\nDate: ${new Date().toLocaleDateString()}\n\n`;
+            checklistData.forEach(i => {
+                summary += `[${i.status}] ${i.title} - ${i.notes}\n`;
+            });
+            copyToClipboard(summary);
+        }
+
+        let currentDepth = 'standard';
+
+        function setDepth(depth) {
+            currentDepth = depth;
+            ['standard', 'detailed', 'enterprise'].forEach(d => {
+                const btn = document.getElementById(`depth-${d}`);
+                if (d === depth) {
+                    btn.className = "p-2.5 rounded-lg glass-card border border-purple-500/50 bg-purple-500/10 text-white font-semibold";
+                } else {
+                    btn.className = "p-2.5 rounded-lg glass-card border border-purple-900/40 text-slate-400 hover:text-white";
+                }
+            });
+            calculateScope();
+        }
+
+        function calculateScope() {
+            const workflows = parseInt(document.getElementById('input-workflows').value);
+            document.getElementById('val-workflows').innerText = `${workflows} Workflow${workflows > 1 ? 's' : ''}`;
+
+            const hasTraining = document.getElementById('check-training').checked;
+            const hasExcel = document.getElementById('check-excel').checked;
+
+            let baseDays = workflows * 2;
+            if (currentDepth === 'detailed') baseDays += 3;
+            if (currentDepth === 'enterprise') baseDays += 6;
+            if (hasTraining) baseDays += 3;
+            if (hasExcel) baseDays += 2;
+
+            document.getElementById('res-timeline').innerText = `${baseDays} - ${baseDays + 3} Business Days`;
+            document.getElementById('res-reviews').innerText = currentDepth === 'enterprise' ? '3 Iteration Cycles' : '2 Iteration Cycles';
+            
+            let formatText = "PDF SOP";
+            if (hasExcel) formatText += " + Custom Excel Tracker";
+            if (hasTraining) formatText += " + Training Deck";
+            document.getElementById('res-format').innerText = formatText;
+        }
+
+        function copyToClipboard(text) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(text);
+            } else {
+                const textArea = document.createElement("textarea");
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            }
+            showToast('Copied to Clipboard!');
+        }
+
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            const msgEl = document.getElementById('toast-message');
+            msgEl.innerText = msg;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function prefillContactSubject() {
+            const workflows = document.getElementById('input-workflows').value;
+            document.getElementById('form-subject').value = `Inquiry: ${workflows} Workflow Documentation Project`;
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('form-name').value;
+            const subject = document.getElementById('form-subject').value;
+            const msg = document.getElementById('form-message').value;
+
+            const mailtoUrl = `mailto:ayehsadeghi9@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent("Name: " + name + "\n\nMessage:\n" + msg)}`;
+            window.location.href = mailtoUrl;
+
+            showToast('Opening email client...');
+        }
+
+        window.onload = function() {
+            initMinimalNeuronBackground();
+            selectWorkflowStep(1);
+            renderChecklistTable();
+            calculateScope();
+        };
+    </script>
+```
