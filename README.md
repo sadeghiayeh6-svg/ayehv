@@ -1,4 +1,4 @@
-# VEGA
+ # VEGA
 
 VEGA — AI-powered business intelligence, automation, and digital transformation studio.
 
@@ -19,7 +19,7 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open http://localhost:3000.
+Open http://www.ayehvega.ir
 
 For database-backed features:
 
